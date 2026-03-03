@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cerita Pilu Gunung Indah Pasir Ipis dan Si Jampang</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --hitam:  #060a06;
+  --gelap:  #0a120a;
+  --jati:   #0f1c0f;
+  --daun:   #1a3a1c;
+  --lumut:  #284d2a;
+  --embun:  #3d7a3a;
+  --pucuk:  #6aaa60;
+  --emas:   #9a7200;
+  --emas2:  #b88c0a;
+  --emas3:  #d4a820;
+  --kuning: #ecc840;
+  --krem:   #f2e8d0;
+  --sutra:  #f8f2e4;
+  --abu:    #7a7060;
+  --merah:  #6b1a1a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--hitam);
+  color: var(--krem);
+  font-family: 'Lora', Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* ── PROGRESS ── */
+#prog { position:fixed; top:0; left:0; height:2px; width:0; background:linear-gradient(90deg,var(--daun),var(--emas3),var(--daun)); z-index:9999; }
+
+/* ── CANVAS ── */
+#bg { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* ── GRAIN ── */
+body::after {
+  content:''; position:fixed; inset:0; z-index:9998; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  opacity:.7;
+}
+
+/* ════════════════════════════════
+   SAMPUL
+════════════════════════════════ */
+.sampul {
+  min-height: 100vh;
+  position: relative; z-index:10;
+  display: flex; flex-direction:column;
+  align-items: center; justify-content: center;
+  padding: 80px 24px; text-align: center;
+  overflow: hidden;
+}
+
+.sampul::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(15,28,15,.98), transparent 65%),
+    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(6,10,6,.9), transparent),
+    radial-gradient(ellipse 80% 60% at 90% 10%, rgba(6,10,6,.9), transparent),
+    linear-gradient(to bottom, #060a06 0%, #0a120a 40%, #060a06 100%);
+}
+
+/* Hujan rintik — CSS animation */
+.hujan {
+  position:absolute; inset:0; overflow:hidden; pointer-events:none;
+}
+.tetes {
+  position:absolute; width:1px; background:linear-gradient(to bottom, transparent, rgba(180,210,180,.15));
+  animation:hujan-anim linear infinite;
+}
+@keyframes hujan-anim {
+  from { transform:translateY(-100px); opacity:0; }
+  10%  { opacity:1; }
+  90%  { opacity:.5; }
+  to   { transform:translateY(110vh); opacity:0; }
+}
+
+.s-inner { position:relative; z-index:2; max-width:660px; }
+
+.s-lokasi {
+  font-family:'Cinzel',serif; font-size:.58rem;
+  letter-spacing:.45em; color:rgba(180,136,10,.6);
+  text-transform:uppercase; margin-bottom:24px;
+  animation:muncul 1.4s ease both;
+}
+
+/* Ornamen atas */
+.s-orn {
+  display:flex; align-items:center; gap:14px;
+  justify-content:center; margin-bottom:20px;
+  animation:muncul 1.4s .1s ease both;
+}
+.s-orn-l { height:1px; width:44px; background:linear-gradient(to right,transparent,rgba(180,136,10,.5)); }
+.s-orn-l.r { background:linear-gradient(to left,transparent,rgba(180,136,10,.5)); }
+.s-orn-t { color:rgba(180,136,10,.5); font-size:.6rem; letter-spacing:.4em; }
+
+/* Judul */
+.s-judul {
+  font-family:'IM Fell English',serif;
+  font-size:clamp(1.6rem,5.5vw,3.2rem);
+  font-weight:400; font-style:italic;
+  color:var(--krem); line-height:1.35;
+  margin-bottom:6px;
+  text-shadow:0 4px 80px rgba(0,0,0,.9);
+  animation:muncul 1.4s .2s ease both;
+}
+.s-judul .dan { color:rgba(242,232,208,.4); font-size:.8em; }
+
+.s-nama {
+  font-family:'Cinzel',serif;
+  font-size:clamp(2rem,7vw,4.5rem);
+  font-weight:600; letter-spacing:.1em;
+  color:var(--emas3); line-height:1;
+  text-shadow:0 0 80px rgba(212,168,32,.3);
+  animation:muncul 1.4s .3s ease both;
+}
+
+.s-garis {
+  width:80px; height:1px; margin:24px auto;
+  background:linear-gradient(to right,transparent,var(--emas2),transparent);
+  animation:muncul 1.4s .45s ease both;
+}
+
+.s-sub {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(.95rem,2.2vw,1.2rem);
+  color:rgba(242,232,208,.5); line-height:1.9;
+  margin-bottom:20px;
+  animation:muncul 1.4s .55s ease both;
+}
+
+/* Label si jampang */
+.s-jampang {
+  display:inline-block;
+  border:1px solid rgba(180,136,10,.25);
+  padding:10px 24px; margin-bottom:36px;
+  animation:muncul 1.4s .7s ease both;
+}
+.s-jampang span {
+  font-family:'Cinzel',serif; font-size:.62rem;
+  letter-spacing:.3em; color:rgba(180,136,10,.6);
+  text-transform:uppercase;
+}
+.s-jampang em {
+  display:block; font-family:'IM Fell English',serif;
+  font-style:italic; font-size:.88rem;
+  color:rgba(242,232,208,.45); margin-top:3px;
+  letter-spacing:.05em;
+}
+
+.scroll-cue {
+  position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
+  text-align:center;
+  animation:muncul 1.4s 1.8s ease both;
+}
+.scroll-cue span { font-size:.58rem; letter-spacing:.22em; color:rgba(242,232,208,.2); text-transform:uppercase; display:block; margin-bottom:10px; }
+.scroll-bar { width:1px; height:52px; background:linear-gradient(to bottom,rgba(180,136,10,.4),transparent); margin:0 auto; animation:drip 2.8s 2s infinite; }
+
+@keyframes drip { 0%,100%{opacity:.2;transform:scaleY(.7)} 55%{opacity:1;transform:scaleY(1)} }
+@keyframes muncul { from{opacity:0;transform:translateY(24px);filter:blur(5px)} to{opacity:1;transform:translateY(0);filter:blur(0)} }
+
+/* ════════════════════════════════
+   ISI CERITA
+════════════════════════════════ */
+.cerita { position:relative; z-index:10; }
+
+.bab {
+  max-width:660px; margin:0 auto;
+  padding:80px 36px;
+}
+@media(max-width:580px){ .bab{ padding:60px 20px; } }
+
+/* Separator */
+.sep {
+  height:1px; max-width:460px; margin:0 auto;
+  background:linear-gradient(to right,transparent,rgba(154,114,0,.2),transparent);
+  position:relative; z-index:10;
+}
+.sep-orn {
+  text-align:center; padding:20px;
+  position:relative; z-index:10;
+  font-size:.65rem; letter-spacing:.5em;
+  color:rgba(180,136,10,.25);
+}
+
+/* Bab label */
+.b-label {
+  font-family:'Cinzel',serif; font-size:.55rem;
+  letter-spacing:.4em; color:rgba(180,136,10,.5);
+  text-transform:uppercase; margin-bottom:20px;
+  display:flex; align-items:center; gap:12px;
+  opacity:0; transform:translateY(14px);
+  transition:all .9s ease;
+}
+.b-label.v { opacity:1; transform:translateY(0); }
+.b-label::after { content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(154,114,0,.2),transparent); }
+
+/* Judul bab */
+.b-judul {
+  font-family:'IM Fell English',serif;
+  font-size:clamp(1.4rem,4vw,2.2rem);
+  font-style:italic; line-height:1.3;
+  color:var(--krem); margin-bottom:28px;
+  opacity:0; transform:translateY(18px);
+  transition:all 1s .06s ease;
+}
+.b-judul.v { opacity:1; transform:translateY(0); }
+.b-judul em { color:var(--emas3); }
+
+/* Paragraf */
+.p {
+  font-family:'Lora',serif;
+  font-size:clamp(.95rem,1.8vw,1.06rem);
+  line-height:2.1; color:rgba(242,232,208,.75);
+  margin-bottom:22px; text-align:justify;
+  opacity:0; transform:translateY(16px);
+  transition:all 1s ease;
+}
+.p.v { opacity:1; transform:translateY(0); }
+.p em { color:var(--pucuk); font-style:italic; }
+.p strong { color:var(--krem); font-weight:600; }
+.p .emas { color:var(--emas3); }
+
+/* Drop cap — hanya bab pertama */
+.p.drop::first-letter {
+  font-family:'IM Fell English',serif;
+  font-size:4.5rem; font-weight:400;
+  float:left; line-height:.72;
+  margin-right:10px; margin-top:8px;
+  color:var(--emas3);
+}
+
+/* Kutipan hati */
+.hati {
+  margin:36px 0; padding:24px 28px;
+  border-left:2px solid rgba(154,114,0,.4);
+  background:rgba(154,114,0,.04);
+  opacity:0; transform:translateX(-18px);
+  transition:all 1s ease;
+}
+.hati.v { opacity:1; transform:translateX(0); }
+.hati p {
+  font-family:'IM Fell English',serif; font-style:italic;
+  font-size:clamp(1rem,2.2vw,1.2rem);
+  color:rgba(242,232,208,.85); line-height:2;
+}
+.hati cite {
+  display:block; margin-top:10px;
+  font-size:.68rem; letter-spacing:.15em;
+  color:rgba(180,136,10,.55); text-transform:uppercase; font-style:normal;
+}
+
+/* Scene alam — deskripsi visual */
+.alam {
+  margin:28px 0; padding:28px 24px;
+  background:linear-gradient(135deg,rgba(15,28,15,.7),rgba(10,18,10,.4));
+  border:1px solid rgba(61,122,58,.1);
+  border-left:2px solid rgba(61,122,58,.3);
+  opacity:0; transform:translateY(18px);
+  transition:all 1s ease;
+  position:relative;
+}
+.alam.v { opacity:1; transform:translateY(0); }
+.alam p {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(.95rem,2vw,1.1rem);
+  color:rgba(180,210,170,.7); line-height:2.1;
+}
+
+/* Angka dramatis */
+.dramatis {
+  text-align:center; padding:44px 20px; margin:36px 0;
+  border-top:1px solid rgba(154,114,0,.12);
+  border-bottom:1px solid rgba(154,114,0,.12);
+  opacity:0; transition:all 1s ease;
+}
+.dramatis.v { opacity:1; }
+.dramatis .angka {
+  font-family:'IM Fell English',serif;
+  font-size:clamp(2.8rem,8vw,5rem);
+  color:var(--emas3); display:block; line-height:1;
+}
+.dramatis .ket {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(.9rem,2vw,1.05rem);
+  color:rgba(242,232,208,.4); margin-top:10px; display:block;
+}
+
+/* Bait puisi dalam cerita */
+.bait {
+  text-align:center; padding:40px 20px; margin:36px 0;
+  opacity:0; transition:all 1s ease;
+}
+.bait.v { opacity:1; }
+.bait span {
+  display:block;
+  font-family:'IM Fell English',serif; font-style:italic;
+  font-size:clamp(1rem,2.3vw,1.25rem);
+  color:rgba(242,232,208,.65); line-height:2.5;
+}
+.bait span.bold { color:var(--emas3); font-size:clamp(1.05rem,2.5vw,1.35rem); }
+.bait span.kecil { font-size:clamp(.8rem,1.6vw,.95rem); color:rgba(242,232,208,.35); }
+
+/* Gelar Si Jampang — badge khusus */
+.gelar-box {
+  text-align:center; margin:36px 0; padding:28px;
+  border:1px solid rgba(154,114,0,.2);
+  background:rgba(154,114,0,.04);
+  opacity:0; transition:all 1s ease;
+}
+.gelar-box.v { opacity:1; }
+.gelar-box .g-label { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.35em; color:rgba(180,136,10,.45); text-transform:uppercase; margin-bottom:10px; }
+.gelar-box .g-teks {
+  font-family:'IM Fell English',serif; font-style:italic;
+  font-size:clamp(1.3rem,3.5vw,2rem);
+  color:var(--krem); line-height:1.5;
+}
+.gelar-box .g-teks em { color:var(--emas3); }
+.gelar-box .g-sub { font-size:.82rem; color:rgba(242,232,208,.35); margin-top:10px; font-style:italic; }
+
+/* ════════════════════════════════
+   PENUTUP
+════════════════════════════════ */
+.penutup {
+  background:linear-gradient(to bottom,var(--jati),var(--hitam));
+  padding:100px 36px; text-align:center;
+  position:relative; z-index:10; overflow:hidden;
+}
+.penutup::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(26,58,28,.4),transparent);
+}
+.p-inner { max-width:540px; margin:0 auto; position:relative; z-index:2; }
+
+.p-orn { font-size:.6rem; letter-spacing:.55em; color:rgba(180,136,10,.3); margin-bottom:32px; }
+
+.p-puisi {
+  font-family:'IM Fell English',serif; font-style:italic;
+  font-size:clamp(1.05rem,2.5vw,1.3rem);
+  line-height:2.5; color:rgba(242,232,208,.78);
+  margin-bottom:44px;
+}
+.p-puisi .e { color:var(--emas3); display:block; }
+
+.p-garis { width:36px; height:1px; background:var(--emas2); margin:0 auto 16px; }
+.p-sumber { font-size:.72rem; color:rgba(242,232,208,.3); letter-spacing:.1em; line-height:2; }
+.p-sumber strong { color:rgba(180,136,10,.5); }
+
+/* CTA */
+.cta-wrap { display:flex; flex-direction:column; gap:10px; max-width:440px; margin:36px auto 0; }
+.cta {
+  padding:15px 22px; text-decoration:none;
+  font-family:'Lora',serif; font-size:.88rem;
+  transition:all .3s; display:block; text-align:center;
+  letter-spacing:.03em;
+}
+.cta-hijau { background:var(--daun); color:var(--krem); border:1px solid rgba(61,122,58,.3); }
+.cta-hijau:hover { background:var(--lumut); }
+.cta-emas { background:transparent; color:var(--emas3); border:1px solid rgba(154,114,0,.3); }
+.cta-emas:hover { background:rgba(154,114,0,.06); }
+.cta-wa { background:rgba(26,58,26,.6); color:rgba(242,232,208,.6); border:1px solid rgba(61,122,58,.15); font-size:.8rem; }
+
+footer {
+  background:#030503; padding:16px 32px;
+  text-align:center; position:relative; z-index:10;
+  font-size:.62rem; color:rgba(255,255,255,.15);
+  letter-spacing:.1em; line-height:2.2;
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<canvas id="bg"></canvas>
+
+<!-- ════════════ SAMPUL ════════════ -->
+<section class="sampul">
+
+  <!-- Hujan rintik -->
+  <div class="hujan" id="hujan"></div>
+
+  <div class="s-inner">
+    <div class="s-lokasi">Pasir Ipis · Jampang Sagaranten · Sukabumi</div>
+
+    <div class="s-orn">
+      <div class="s-orn-l"></div>
+      <div class="s-orn-t">✦ ✦ ✦</div>
+      <div class="s-orn-l r"></div>
+    </div>
+
+    <div class="s-judul">
+      Cerita Pilu Gunung Indah
+      <br><span class="dan">—</span>
+    </div>
+    <div class="s-nama">Pasir Ipis</div>
+    <div class="s-judul" style="font-size:clamp(1rem,3vw,1.6rem); margin-top:6px">
+      dan <em style="color:var(--emas3)">Si Jampang</em>
+    </div>
+
+    <div class="s-garis"></div>
+
+    <p class="s-sub">
+      Sebuah kesaksian yang ditulis bukan untuk dikenang —<br>
+      tapi agar hutan ini tidak dilupakan
+    </p>
+
+    <div class="s-jampang">
+      <span>Dituturkan oleh</span>
+      <em>"Dasar Si Jampang" — gelar yang aku terima dengan bangga</em>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Mulai membaca</span>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<!-- ════════════ CERITA ════════════ -->
+<div class="cerita">
+
+<!-- ─── BAB 1 ─── -->
+<div class="bab">
+  <div class="b-label">Prolog</div>
+  <h2 class="b-judul">Mereka Bilang Aku <em>Si Jampang</em></h2>
+
+  <p class="p drop">
+    Aku orang Jampang. Lahir dan besar di Jampang Sagaranten — kampung yang oleh sebagian orang kota dianggap jauh, terpencil, udik. Dan memang benar, ketika aku pertama kali merantau masuk kota, ada yang menyebutku dengan nada setengah meremehkan: <strong class="emas">"Dasar Si Jampang."</strong>
+  </p>
+
+  <p class="p">
+    Awalnya aku diam. Mungkin sedikit tersinggung. Tapi lama-lama aku mengerti — <em>Si Jampang bukan hinaan. Ia adalah gelar.</em> Gelar dari tanah yang pernah melahirkan jiwa-jiwa pemberani yang tidak takut berdiri sendirian ketika yang benar harus dipertahankan.
+  </p>
+
+  <div class="gelar-box">
+    <div class="g-label">Gelar yang Aku Terima</div>
+    <div class="g-teks">"Biarlah aku <em>Si Jampang.</em><br>Anak udik yang mencintai gunungnya."</div>
+    <div class="g-sub">Dan dari cinta itulah kisah ini dimulai.</div>
+  </div>
+
+  <p class="p">
+    Karena rupanya, menjadi Si Jampang berarti membawa dalam darah sebuah keyakinan kuno — bahwa tanah, hutan, dan air adalah saudara tua manusia yang harus dijaga, bukan dikorbankan.
+  </p>
+</div>
+
+<div class="sep-orn">✦</div>
+
+<!-- ─── BAB 2 ─── -->
+<div class="bab">
+  <div class="b-label">Bagian Pertama</div>
+  <h2 class="b-judul">Pertama Kali Aku Melihat<br><em>Pasir Ipis</em></h2>
+
+  <p class="p">
+    Tahun <strong>2011</strong>. Aku datang ke Kampung Pasir Ipis, Gunung Guruh, Sukabumi — dan untuk pertama kalinya dalam hidupku, aku berhenti di tengah jalan tanpa tahu mengapa.
+  </p>
+
+  <div class="alam">
+    <p>Hamparan sawah terbentang hijau seperti permadani yang dijahit tangan Tuhan sendiri. Air mengalir dari atas — curcor, deras, jernih — berbunyi seperti lagu yang tidak punya akhir. Hutan di sekelilingnya begitu rimbun, begitu lebat, begitu hidup hingga udaranya terasa berat dengan oksigen dan doa. Tanah di sini subur bukan hanya karena hujan — tapi karena telah berabad-abad dijaga oleh tangan-tangan yang mengerti bahwa bumi adalah amanah, bukan komoditas.</p>
+  </div>
+
+  <p class="p">
+    <em>Waas.</em> Itu kata yang paling tepat dalam bahasa Sunda untuk menggambarkan apa yang aku rasakan waktu itu. Rasa haru yang dalam, bercampur rindu pada sesuatu yang belum pernah aku miliki tapi terasa sudah lama hilang.
+  </p>
+
+  <div class="hati">
+    <p>"Aku tidak tahu waktu itu bahwa tanah yang pertama kali membuatku berhenti itu adalah tanah yang bertahun-tahun kemudian akan membuatku tidak bisa tidur, tidak bisa makan dengan tenang, dan akhirnya — tidak bisa diam."</p>
+  </div>
+
+  <p class="p">
+    Di antara suara air dan angin yang menyapu pucuk-pucuk padi, <strong>cinta itu tumbuh begitu saja</strong> — seperti lumut di atas batu, tanpa diminta, tanpa disadari, tapi sangat kuat melekat.
+  </p>
+</div>
+
+<div class="sep-orn">✦</div>
+
+<!-- ─── BAB 3 ─── -->
+<div class="bab">
+  <div class="b-label">Bagian Kedua</div>
+  <h2 class="b-judul">Kabar yang Membuat<br><em>Langit Terasa Runtuh</em></h2>
+
+  <p class="p">
+    Tidak lama setelah itu, kabar itu datang. Perlahan di awal — bisik-bisik di warung, di jalan setapak, di sela-sela percakapan orang tua yang wajahnya tiba-tiba menua lebih cepat dari biasanya.
+  </p>
+
+  <p class="p">
+    <strong>Gunung itu sedang dijual.</strong> Petak demi petak. Hektar demi hektar. Kepada tangan-tangan yang tidak mengenal bau tanah setelah hujan, yang tidak pernah mendengar suara air di subuh hari, yang melihat gunung bukan sebagai kehidupan — tapi sebagai angka di atas kertas.
+  </p>
+
+  <div class="alam">
+    <p>Aku bayangkan hari-hari itu — ketika tanda tangan demi tanda tangan diletakkan di atas meja-meja yang jauh dari Pasir Ipis. Gunung yang selama generasi menjaga kampung ini, yang menampung air hujan dan melepaskannya perlahan ke sawah-sawah di bawah, yang menjadi tempat berlindung ribuan makhluk hidup — itu semua kini menjadi angka dalam transaksi yang dingin dan sunyi.</p>
+  </div>
+
+  <p class="p">
+    Singkat cerita — <em>habis sudah.</em> Lima puluh hektar hutan berpindah tangan ke para pengusaha besar. Dan di atas lahan itu, direncanakan sesuatu yang kata itu saja sudah membuat dada terasa sesak: <strong>pertambangan.</strong>
+  </p>
+
+  <div class="bait">
+    <span>Gunung yang selama ini melindungi,</span>
+    <span class="bold">kini tidak ada yang melindunginya.</span>
+    <span class="kecil">dan aku — hanya Si Jampang — tidak bisa menerima itu.</span>
+  </div>
+</div>
+
+<div class="sep-orn">✦</div>
+
+<!-- ─── BAB 4 ─── -->
+<div class="bab">
+  <div class="b-label">Bagian Ketiga</div>
+  <h2 class="b-judul">Si Jampang Bergerak<br><em>dalam Kelemahan</em></h2>
+
+  <p class="p">
+    Aku tidak kaya. Aku tidak punya koneksi. Aku tidak punya nama yang membuat orang berhenti dan mendengarkan. Aku hanya Si Jampang — anak udik dari Jampang Sagaranten yang kebetulan jatuh cinta pada gunung orang lain.
+  </p>
+
+  <p class="p">
+    Tapi ada sesuatu dalam diri anak Jampang yang tidak bisa berdiam diri ketika sesuatu yang dicintainya terancam. <em>Naluri itu lebih tua dari logika. Lebih kuat dari perhitungan.</em> Dan ia berkata dengan suara yang tidak bisa dibantah: <strong>bergerak.</strong>
+  </p>
+
+  <p class="p">
+    Maka aku bergerak — <em>secara tersembunyi, dalam kelemahan, tanpa modal, tapi dengan cinta yang tidak tahu batasnya.</em> Pikiranku sederhana: jika lahan itu bisa dimanfaatkan untuk pertanian sebelum mesin tambang datang, mungkin ada harapan. Mungkin ada celah. Mungkin ada mukjizat kecil yang menunggu untuk terjadi.
+  </p>
+
+  <div class="dramatis">
+    <span class="angka">3.800</span>
+    <span class="ket">bibit kopi — diturunkan dengan tangan sendiri,<br>dari berbagai sumber yang dikejar satu per satu</span>
+  </div>
+
+  <p class="p">
+    Tiga ribu delapan ratus bibit kopi. Aku turunkan sendiri. Kutanam di lahan yang kubuka sendiri seluas <strong>3,5 hektar</strong> — bukan dengan alat besar, bukan dengan tim profesional. Dengan tangan, dengan punggung, dengan sisa-sisa tenaga yang kupaksa untuk tidak menyerah sebelum bibit itu menyentuh tanah.
+  </p>
+
+  <p class="p">
+    Selain kopi, aku tanam juga <em>kacang inchi</em>. Aku ingin membuktikan — kepada perusahaan itu, kepada siapapun yang mau melihat — bahwa tanah ini tidak perlu dilukai untuk menghasilkan. Bahwa gunung ini lebih berharga hidup daripada mati.
+  </p>
+
+  <div class="hati">
+    <p>"Mungkin memang ini yang disebut cinta buta. Karena orang yang waras tidak akan melakukan apa yang aku lakukan — dengan kondisi yang aku miliki. Tapi cinta buta itu yang membuat kakiku terus melangkah ketika akal sehat sudah lama menyuruhku berhenti."</p>
+  </div>
+</div>
+
+<div class="sep-orn">✦</div>
+
+<!-- ─── BAB 5 ─── -->
+<div class="bab">
+  <div class="b-label">Bagian Keempat</div>
+  <h2 class="b-judul">Harga yang Dibayar<br><em>Seorang Si Jampang</em></h2>
+
+  <p class="p">
+    Cinta tidak pernah datang tanpa harga. Dan cinta sebesar ini — kepada gunung yang bukan milikku, kepada hutan yang sudah berpindah tangan, kepada tanah yang tidak bisa kupanggil dengan namaku sendiri — <strong>harganya tidak murah.</strong>
+  </p>
+
+  <p class="p">
+    Dari berbagai sumber aku cari modal. Aku paksa keadaan — karena aku tahu jika menunggu keadaan siap, tambang itu akan datang lebih dulu. <em>Aku memilih bertindak dalam ketidaksiapan daripada diam dalam kenyamanan.</em>
+  </p>
+
+  <div class="dramatis">
+    <span class="angka">Rp 200 Juta+</span>
+    <span class="ket">lilitan hutang yang aku tanggung —<br>bukan untuk kemewahan, bukan untuk kesenangan.<br>Tapi untuk pohon-pohon kopi yang aku cintai.</span>
+  </div>
+
+  <p class="p">
+    Hutang itu menumpuk. Program kopi dan kacang inchi tidak berjalan sesuai harapan. Ada kendala di sana-sini — kendala yang tidak perlu aku sebutkan satu per satu karena setiap orang yang pernah berjuang dalam ketidakberdayaan pasti sudah tahu rasanya: <em>ketika usaha terbesar pun tidak cukup, ketika niat paling tulus pun tidak menjamin hasil.</em>
+  </p>
+
+  <div class="alam">
+    <p>Dan di malam-malam setelah kegagalan itu — ketika hutang terasa seperti batu besar di dada, ketika tidak ada tempat untuk berbagi, ketika bahkan aku sendiri bertanya-tanya apakah yang kulakukan ini adalah keberanian atau kebodohan — aku ingat wajah Pasir Ipis. Hamparan sawahnya. Suara airnya. Dan gunung yang masih berdiri di sana, diam, menunggu, seolah berkata: aku masih di sini. Jangan pergi.</p>
+  </div>
+
+  <p class="p">
+    <strong>Dan gunung itu memang masih berdiri.</strong> Hingga hari ini, program tambang belum berjalan — berkat kebijakan Bapak Gubernur yang mempersulit izin pertambangan. Satu pintu yang belum tertutup. Satu napas yang masih tersisa.
+  </p>
+
+  <div class="hati">
+    <p>"Kepada siapa aku harus berbagi atas tindakan yang terlalu berani ini? Selama tiga tahun ini aku masih dikejar investor yang ingin ikut berjuang. Aku masih berdiri — meski dengan lutut yang sudah lama gemetar."</p>
+  </div>
+</div>
+
+<div class="sep-orn">✦</div>
+
+<!-- ─── BAB 6 ─── -->
+<div class="bab">
+  <div class="b-label">Bagian Kelima</div>
+  <h2 class="b-judul"><em>Bangga</em> — Kata yang<br>Tidak Bisa Aku Sembunyikan</h2>
+
+  <p class="p">
+    Di atas semua kegagalan itu, di atas hutang yang masih membelit, di atas mimpi-mimpi yang belum terwujud — ada satu perasaan yang tidak bisa aku ingkari: <strong class="emas">aku bangga.</strong>
+  </p>
+
+  <p class="p">
+    Bangga bukan karena berhasil. Bangga karena <em>sudah mencoba dengan segenap yang aku punya</em>. Bangga karena sudah berdiri di antara gunung dan mesin dengan berbekal cinta dan bibit kopi. Bangga karena menjadi Si Jampang yang tidak lari, yang tidak diam, yang memilih untuk bergerak meski tidak ada yang menjamin hasil.
+  </p>
+
+  <div class="bait">
+    <span class="kecil">Orang kota bilang aku Si Jampang —</span>
+    <span>anak udik yang tidak tahu diri.</span>
+    <span class="bold">Biarlah.</span>
+    <span>Karena Si Jampang tidak mengenal kata menyerah</span>
+    <span class="kecil">pada tanah yang dicintainya.</span>
+  </div>
+
+  <p class="p">
+    Dan kini, dari perjuangan yang pahit itu, lahir sesuatu yang baru: <strong>Program Gunung Guruh Hijau Lestari</strong>. Kali ini dengan rencana yang lebih matang, strategi yang lebih terukur, dan harapan yang telah ditempa oleh pengalaman yang tidak bisa dibeli di tempat manapun.
+  </p>
+
+  <p class="p">
+    Aku memilih agroforestri Labu Siam — tanaman yang produktif dalam tiga hingga empat bulan, yang bisa berdampingan dengan pohon-pohon keras, yang bisa menjadi bukti hidup bahwa <em>gunung ini lebih berharga jika ditanami daripada dikeruk.</em>
+  </p>
+
+  <div class="gelar-box">
+    <div class="g-label">Satu hal yang aku tahu pasti</div>
+    <div class="g-teks">Selama gunung ini masih berdiri,<br><em>Si Jampang tidak akan berhenti.</em></div>
+    <div class="g-sub">— Anak Jampang Sagaranten, Sukabumi</div>
+  </div>
+</div>
+
+<div class="sep-orn">✦</div>
+
+<!-- ─── EPILOG ─── -->
+<div class="bab">
+  <div class="b-label">Epilog</div>
+  <h2 class="b-judul">Kepada Siapapun<br>yang <em>Membaca Ini</em></h2>
+
+  <p class="p">
+    Aku tidak menulis cerita ini untuk dikasihani. Aku menulis cerita ini karena <em>gunung ini perlu lebih banyak suara selain suaraku.</em>
+  </p>
+
+  <p class="p">
+    Lima puluh hektar hutan di atas Kampung Pasir Ipis, Gunung Guruh, Sukabumi — ia bukan sekadar angka lahan. Ia adalah sumber air yang menghidupi sawah-sawah di bawah. Ia adalah penahan longsor bagi ratusan keluarga. Ia adalah warisan yang tidak seharusnya habis dalam satu generasi demi keuntungan segelintir orang.
+  </p>
+
+  <p class="p">
+    Dan ia masih bisa diselamatkan. <strong>Kita masih punya waktu.</strong>
+  </p>
+
+  <p class="p">
+    Yang aku butuhkan bukan simpatimu. Yang aku butuhkan adalah <em>suaramu, kehadiranmu, dan sedikit keberanianmu</em> untuk ikut berdiri di sini bersamaku — Si Jampang yang keras kepala ini — dalam gerakan yang lahir dari cinta yang tidak bisa diam.
+  </p>
+
+  <div class="hati">
+    <p>"Pasir Ipis mengajariku bahwa keindahan yang paling dalam adalah keindahan yang rapuh — yang bisa hilang jika tidak ada yang menjaganya. Dan menjaganya adalah tugas kita bersama, bukan hanya tugasku."</p>
+    <cite>— Si Jampang, dari kaki Gunung Guruh</cite>
+  </div>
+</div>
+
+</div><!-- end cerita -->
+
+<!-- ════════════ PENUTUP ════════════ -->
+<section class="penutup">
+  <div class="p-inner">
+    <div class="p-orn">✦ &nbsp;&nbsp; ✦ &nbsp;&nbsp; ✦</div>
+
+    <div class="p-puisi">
+      Pasir Ipis, kau terlalu indah untuk dilupakan.<br>
+      <span class="e">Terlalu berharga untuk dihancurkan.</span><br>
+      Dan Si Jampang ini — terlalu cinta<br>
+      <span class="e">untuk bisa diam.</span>
+    </div>
+
+    <div class="cta-wrap">
+      <a class="cta cta-hijau" href="https://malviejayagroup-prog.github.io/tolak-tambang-sukabumi/" target="_blank">
+        ✍️ Tanda Tangani Petisi — Selamatkan Pasir Ipis
+      </a>
+      <a class="cta cta-emas" href="https://hijau-gunung-guruh.tiiny.site" target="_blank">
+        🌿 Dukung Program Gunung Guruh Hijau Lestari
+      </a>
+      <a class="cta cta-wa" href="https://wa.me/6283871666136" target="_blank">
+        💬 Hubungi Langsung — WA: 083871666136
+      </a>
+    </div>
+
+    <div style="margin-top:40px">
+      <div class="p-garis"></div>
+      <div class="p-sumber">
+        Kisah nyata dari <strong>Kp. Pasir Ipis · Gunung Guruh · Sukabumi</strong><br>
+        Dituturkan oleh anak Jampang Sagaranten yang mencintai hutannya<br>
+        <span style="color:rgba(242,232,208,.2)">Program Gunung Guruh Hijau Lestari · 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  "Cerita Pilu Gunung Indah Pasir Ipis dan Si Jampang" · Program Gunung Guruh Hijau Lestari 🌿<br>
+  Petisi: malviejayagroup-prog.github.io/tolak-tambang-sukabumi · Program: hijau-gunung-guruh.tiiny.site
+</footer>
+
+<script>
+// Progress
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=p+'%';
+});
+
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const siblings=[...e.target.parentElement.children];
+      const idx=siblings.indexOf(e.target);
+      setTimeout(()=>e.target.classList.add('v'),idx*55);
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.b-label,.b-judul,.p,.hati,.alam,.dramatis,.bait,.gelar-box').forEach(el=>obs.observe(el));
+
+// Hujan rintik
+const hujan=document.getElementById('hujan');
+for(let i=0;i<35;i++){
+  const t=document.createElement('div');
+  t.className='tetes';
+  t.style.cssText=`
+    left:${Math.random()*100}%;
+    height:${Math.random()*60+40}px;
+    top:-100px;
+    opacity:${Math.random()*.4+.1};
+    animation-duration:${Math.random()*3+2.5}s;
+    animation-delay:${Math.random()*5}s;
+  `;
+  hujan.appendChild(t);
+}
+
+// Canvas particles
+const cv=document.getElementById('bg'),ctx=cv.getContext('2d');
+let W,H;
+function rsz(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+const pts=Array.from({length:35},()=>({
+  x:Math.random()*1400,y:Math.random()*900,
+  sz:Math.random()*1.4+.3,
+  vx:(Math.random()-.5)*.15,
+  vy:-(Math.random()*.3+.08),
+  life:Math.random()*500,mxLife:350+Math.random()*350,
+  col:Math.random()>.5?[61,122,58]:[154,114,0]
+}));
+(function loop(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p=>{
+    p.x+=p.vx+Math.sin(p.life*.016)*.2;p.y+=p.vy;p.life++;
+    if(p.life>p.mxLife||p.y<-20){p.x=Math.random()*W;p.y=H+20;p.life=0;}
+    const a=Math.sin((p.life/p.mxLife)*Math.PI)*.35;
+    const[r,g,b]=p.col;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.sz,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${r},${g},${b},${a})`;ctx.fill();
+  });
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
